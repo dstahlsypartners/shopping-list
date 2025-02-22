@@ -1,0 +1,127 @@
+Below is the updated development plan reflecting the change to use Clerk for authentication instead of Google OAuth:
+
+Collaborative Online Shopping List Application Development Plan
+
+Phase 1: Planning and Architecture
+	1.	Requirements Definition
+	•	Core Features:
+	•	Invite-only authentication via Clerk.
+	•	Multiple shopping lists accessible to all users with full read-write permissions.
+	•	Items with a simple data model: name and quantity.
+	•	Categorization of items (e.g., Dairy, Vegetables).
+	•	Dashboard view for managing multiple lists.
+	•	Tech Stack:
+	•	Frontend: Next.js
+	•	Backend/API: Next.js API routes
+	•	Database: PostgreSQL (via Neon integration)
+	•	Authentication: Clerk
+	•	Deployment: Vercel
+	2.	System Architecture
+	•	UI/Frontend:
+	•	Built with Next.js, leveraging SSR for dynamic user-specific content.
+	•	Backend/API:
+	•	Next.js API routes handling CRUD operations for lists and items.
+	•	Database:
+	•	PostgreSQL schema design for users, lists, and items.
+	•	Authentication Integration:
+	•	Use Clerk for secure, invite-only user authentication.
+	•	Deployment:
+	•	Utilize Vercel for seamless deployment and environment management.
+
+Phase 2: Database and Data Modeling
+	1.	Design the PostgreSQL Schema
+	•	Users Table:
+	•	Columns: id, email, name, etc.
+	•	Note: While Clerk handles authentication, storing user-specific data in PostgreSQL might be necessary to link user actions with lists.
+	•	Lists Table:
+	•	Columns: id, title, created_at, etc.
+	•	Items Table:
+	•	Columns: id, list_id, name, quantity, category, created_at
+	•	Relationships:
+	•	A list can have multiple items.
+	•	All authenticated users share access to all lists.
+	2.	Database Setup
+	•	Configure Neon PostgreSQL instance.
+	•	Develop migration scripts (using Prisma, TypeORM, or plain SQL scripts) to establish the tables and relationships.
+
+Phase 3: Authentication and Authorization with Clerk
+	1.	Implement Invite-Only Mechanism
+	•	Invite System:
+	•	Design and implement an invite code system.
+	•	Validate invite codes during registration to restrict access.
+	•	Clerk Integration:
+	•	Integrate Clerk into your Next.js application for authentication.
+	•	Configure the Clerk dashboard to handle user invites and manage authentication settings.
+	•	Store necessary Clerk configuration (API keys, publishable keys, etc.) in Vercel’s environment variables.
+	2.	User Management
+	•	User Data Synchronization:
+	•	Decide if additional user data from Clerk should be synced to your PostgreSQL users table.
+	•	Access Control:
+	•	Ensure that middleware checks validate a user’s authenticated status using Clerk’s SDK.
+	•	Grant full read-write permissions to all authenticated users.
+
+Phase 4: API Development
+	1.	Define API Endpoints (Next.js API Routes)
+	•	Lists Endpoints:
+	•	GET /api/lists – Retrieve all lists.
+	•	POST /api/lists – Create a new list.
+	•	PUT /api/lists/[id] – Update a specific list.
+	•	DELETE /api/lists/[id] – Delete a list.
+	•	Items Endpoints:
+	•	GET /api/lists/[listId]/items – Retrieve items for a list.
+	•	POST /api/lists/[listId]/items – Add an item.
+	•	PUT /api/items/[id] – Update an item.
+	•	DELETE /api/items/[id] – Remove an item.
+	2.	CRUD Functionality
+	•	Develop and test each endpoint locally.
+	•	Implement error handling, input validation, and security checks.
+	•	Ensure endpoints verify the user’s authentication status through Clerk middleware.
+
+Phase 5: Frontend Development
+	1.	Dashboard and List Management UI
+	•	Dashboard:
+	•	Display all available shopping lists.
+	•	Provide navigation to individual lists.
+	•	List Page:
+	•	Show list details and items grouped by category.
+	•	Allow users to add, update, or delete items.
+	•	Responsive Design:
+	•	Ensure the interface is mobile-friendly.
+	2.	State Management & UI Logic
+	•	Manage state using React Context or a state management library if necessary.
+	•	Implement a refresh/polling mechanism to update the shopping lists periodically.
+	3.	Integration with API Endpoints
+	•	Connect frontend components to the API routes.
+	•	Handle loading states, success/error notifications, and form validations.
+
+Phase 6: Testing and Quality Assurance
+	1.	Unit Testing
+	•	Write unit tests for API routes and React components using Jest and React Testing Library.
+	2.	Integration and End-to-End Testing
+	•	Set up integration tests to validate user flows (e.g., registration via invite, list creation, item management) using tools like Cypress.
+	3.	Security Testing
+	•	Test the invite-only flow and ensure only authenticated users (via Clerk) can access the API routes.
+
+Phase 7: Deployment and CI/CD
+	1.	Deployment on Vercel
+	•	Configure your Vercel project with necessary environment variables (Neon PostgreSQL credentials, Clerk API keys).
+	•	Deploy the application using Vercel’s CI/CD pipeline.
+	2.	Continuous Integration
+	•	Integrate automated tests that run on every push.
+	•	Ensure deployments occur only after passing tests.
+	3.	Monitoring and Logging
+	•	Implement logging for API endpoints and critical user actions.
+	•	Monitor performance and error reporting using Vercel’s built-in tools or third-party services.
+
+Phase 8: Post-Deployment and Future Enhancements
+	1.	User Feedback and Iteration
+	•	Collect feedback from early users.
+	•	Plan iterative improvements based on usage and feedback.
+	2.	Performance Optimization
+	•	Continuously monitor and optimize application performance, including database queries and API response times.
+	3.	Additional Features (Future Roadmap)
+	•	Consider adding offline capabilities.
+	•	Evaluate the need for conflict management if real-time editing becomes necessary.
+	•	Explore additional integrations (e.g., calendar reminders, grocery delivery services).
+
+This updated plan reflects the switch to Clerk for authentication while keeping all other aspects of the project aligned with your initial vision. Let me know if you need further adjustments or additional details on any of these phases!
