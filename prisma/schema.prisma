@@ -1,13 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -21,20 +19,20 @@ model User {
 model List {
   id        String   @id @default(cuid())
   title     String
-  items     Item[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  items     Item[]
 }
 
 model Item {
-  id         String   @id @default(cuid())
-  name       String
-  quantity   Int      @default(1)
-  category   String?
-  list       List     @relation(fields: [listId], references: [id], onDelete: Cascade)
-  listId     String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  quantity  Int      @default(1)
+  category  String?
+  listId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  list      List     @relation(fields: [listId], references: [id], onDelete: Cascade)
 
   @@index([listId])
-} 
+}
