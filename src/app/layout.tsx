@@ -8,6 +8,7 @@ import {
   SignedOut,
   UserButton
 } from '@clerk/nextjs';
+import Link from "next/link";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,13 +29,25 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${inter.variable} font-sans antialiased`}>
-          <header className="p-4 flex justify-end">
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton afterSignOutUrl="/"/>
-            </SignedIn>
+          <header className="p-4 flex justify-between items-center">
+            <nav>
+              <SignedIn>
+                <Link 
+                  href="/admin"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Admin
+                </Link>
+              </SignedIn>
+            </nav>
+            <div>
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton afterSignOutUrl="/"/>
+              </SignedIn>
+            </div>
           </header>
           {children}
         </body>
